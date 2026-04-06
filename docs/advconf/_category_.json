@@ -1,0 +1,8 @@
+{
+    "label": "Configuración Avanzada",
+    "position": 9,
+    "link": {
+        "type": "doc",
+        "id": "advconf/intro"
+    }
+}

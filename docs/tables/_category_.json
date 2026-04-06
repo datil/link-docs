@@ -1,0 +1,9 @@
+{
+    "label": "Tablas",
+    "position": 5,
+    "link": {
+        "type": "generated-index",
+        "title": "Estructura de Tablas",
+        "description": "En esta sección utilizamos DDL en dialecto SQL Server para describir la estructura de las tablas o vistas que deben existir para que Link pueda obtener la información completa del comprobante y emitirlo."
+    }
+}
