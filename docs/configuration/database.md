@@ -13,7 +13,7 @@ registro contiene información como el estado, la fecha de registro en la tabla
 de control, la fecha y el número de autorización y el ID (id_externo) del
 documento en Datil.
 
-En el archivo [environment.ini](./entorno) va la configuración de la
+En el archivo [environment.ini](./environment) va la configuración de la
 conexión a la base donde se encuentran las tablas de control y mensaje.
 En el archivo [companies/my company.ini](./company) debes
 configurar la conexión a la base de datos donde están las tablas/vistas desde

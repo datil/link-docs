@@ -13,6 +13,27 @@ inserte registros en la tabla de control.
 Utiliza sólo letras, números, guiones o sub-guiones para el nombre del archivo.
 Ejemplo: `acme_inc`
 
+### Varias empresas en la misma instalación
+
+Puedes tener varios archivos en `companies/`, por ejemplo `acme_inc.ini` y `otra_empresa.ini`. Cada uno lleva su RUC, su sección `[Api]` y su conexión `[DatabaseSource]`. En la tabla **Control**, el campo `company_name` coincide con el nombre del archivo (sin `.ini`) para que los documentos de una empresa no se mezclen con los de otra.
+
+Cuando **varias empresas comparten la misma base de datos del ERP** (las mismas tablas de facturas, notas, etc.), además debes usar la sección `[Search]` para que Link solo lea los documentos de esa compañía.
+
+### [Search]
+
+Va en el mismo archivo ini de la compañía (`companies/tu_empresa.ini`).
+
+Parámetros | &nbsp;
+---------- | -----------
+field_name | Nombre de la columna en tus tablas (o vistas) que identifica a la empresa. Ejemplo: `codigo_empresa`, `id_compania`.
+field_value | Valor que corresponde a **esta** compañía en esa columna. Si en SQL debe ir entre comillas, inclúyelas aquí. Ejemplo numérico: `1`. Ejemplo texto: `'ACME'`.
+
+Si en tu base solo hay una empresa o cada empresa tiene su propia base, deja los dos en `None`.
+
+Link arma un fragmento de condición (` AND ` + columna + ` = ` + valor) y lo coloca donde en los queries del comprobante hayas puesto el marcador `:company_search`. También puede sustituir los marcadores `:company_field_name` y `:company_field_value` en las sentencias de `invoice.ini`, `credit_note.ini`, etc., según las necesite cada consulta.
+
+Ejemplo: dos empresas en la misma tabla `facturas.factura`. En `acme.ini` pones `field_name = codigo_empresa` y `field_value = 1`. En `contoso.ini` los mismos nombres de campo con `field_value = 2`. En los `SELECT` que buscan documentos nuevos (`all_stored_locally`, `not_controlled`, `not_controlled_first_time`, etc.) debes añadir en el `WHERE` el marcador `:company_search` (u otros que uses) para que el filtro se aplique.
+
 ### [General]
 En la sección `[General]` configura el parámetro `ruc` con el ruc de la empresa.
 
@@ -30,6 +51,8 @@ Parámetro           | Tipo                    | Descripción
 xkey<p class="dt-data-param-required">requerido</p> | string | API Key para emitir documentos. Esta información se encuentra en la configuración de la compañía en el portal web
 xpassword<p class="dt-data-param-required">requerido</p> | string | Contraseña del certificado de firma electrónica
 environment<p class="dt-data-param-required">requerido</p> | integer | Pruebas: `1`. Producción `2`.
+
+La API Key y la contraseña del certificado las obtienes en el portal de Dátil, en la configuración de la compañía. **`xpassword`** es la contraseña del archivo de firma electrónica que subiste; debe ser la misma que figura aquí. Mientras pruebas dejas `environment = 1`; cuando pases a facturar en real cambias a `2`.
 
 ### [IssueFromDatabase]
 
@@ -65,9 +88,18 @@ Ejemplo: `invoice = C:\\Program Files\Facturas`
 Configuración del patrón del nombre de los archivos XML que contienen la información de los documentos a emitirse. Para esta configuración se debe especificar el nombre del documento y como valor la asignación del prefijo asociado al archivo XML.
 Ejemplo: `invoice = FA`
 
+### Emisión por XML en la práctica
+
+1. En `environment.ini` activa `issue_receipts_from_xml = yes` y revisa `issue_receipts_from_xml_interval` en `[Scheduler]`.
+2. En el ini de la compañía, en `[IssueFromXml]`, pon `yes` solo en los comprobantes que quieras tomar desde archivos.
+3. En `[XmlSource]` define la carpeta de cada tipo. En `[XmlSourcePattern]` el prefijo o patrón del nombre del archivo.
+4. Reinicia el servicio para aplicar cambios.
+
+Si un XML tiene errores o no coincide con el patrón, revisa la carpeta `logs` y, si aplica, los mensajes en tu base.
+
 ### Sincronización y Eventos
 
-Link tiene la habilidad de suscribirse a [eventos](https://datil.dev/next/events)
+Link tiene la habilidad de suscribirse a [eventos](https://datil.dev/#eventos)
 emitidos por Datil y ejecutar sentencias SQL y descargar archivos. Cualquier
 atributo del evento que contenga la dirección a un recurso (URI) válido puede
 ser descargado y almacenado en un directorio del sistema.

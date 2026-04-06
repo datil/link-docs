@@ -1,3 +1,7 @@
+---
+title: "Liquidación de compra"
+---
+
 A continuación están detalladas todas las estructuras disponibles para emitir una
 liquidacion. Las únicas que deben contener información son:
 liquidaciones_compra.liquidacion, liquidaciones_compra.item,

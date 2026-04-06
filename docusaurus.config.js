@@ -12,7 +12,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Link Docs',
   tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo-datil.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -73,7 +73,7 @@ const config = {
       }),
     ],
   ],
-   plugins: [
+   /* plugins: [
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -83,7 +83,7 @@ const config = {
         sidebarPath: './sidebarsApi.js',
       },
     ],
-  ],
+  ], */
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -105,13 +105,13 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-          {
+          /* {
           type: 'docSidebar',
           label: 'API',
           position: 'left',
           docsPluginId: 'api',
           sidebarId: 'apiSidebar',
-          },
+          }, */
           /* {to: '/blog', label: 'Blog', position: 'left'}, */
           {
             href: 'https://github.com/facebook/docusaurus',

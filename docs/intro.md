@@ -14,6 +14,7 @@ guías de remisión y liquidaciones de compra.
 en ejecución permanente para revisar periódicamente la base de datos en busca de
 comprobantes a emitir.
 
+Si vas a instalar desde cero, puedes seguir la [Guía del primer día](./guia-primer-dia).
 
 **¿Cómo funciona?**
 

@@ -1,3 +1,7 @@
+---
+title: "Guía de remisión"
+---
+
 A continuación están detalladas todas las estructuras disponibles para emitir una
 guía de remisión. Las únicas que deben contener información son:
 guia_remision.guia_remision, guia_remision.destinatario, guia_remision.item

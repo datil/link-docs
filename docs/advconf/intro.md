@@ -17,7 +17,7 @@ En cada archivo `.ini` cada _query_ está asignado a una variable.
 
 Si aún no ha instalado __Link__, puede crear un archivo `.ini` de respaldo con los queries configurados.
 
-[Ver ejemplos de archivos de configuración](#ejemplos-de-archivos-de-configuracion)
+[Ver ejemplos de archivos de configuración](../../static/config.zip)
 
 __Nombres de tablas y columnas__
 

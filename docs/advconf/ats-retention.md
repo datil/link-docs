@@ -6,7 +6,7 @@ sidebar_position: 2
 Los queries para la emisión electrónica de __comprobantes de retención ats__ se guardan en el archivo de configuración
 `ats_retention.ini`.
 
-[Ejemplo de archivo ats_retention.ini](/link-app#credit_note-ini)
+[Ejemplo de archivo ats_retention.ini](../../static/config/receipts/ats_retention.ini)
 
 ### Retención ATS
 
@@ -32,7 +32,7 @@ Campo |  Descripción | Valor de ejemplo
 id_local | integer | Identifica de manera única la retención ats. __Requerido__
 secuencial | string  | Número de secuencia de la retención ats. __Requerido__
 fecha_emision | datetime  | Fecha de emisión   __Requerido__
-clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](#clave-de-acceso) la clave de acceso?
+clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](https://datil.dev/#clave-de-acceso) la clave de acceso?
 tipo_emision | integer | Emisión normal: `1`. Emisión por indisponibilidad: `2` __Requerido__
 periodo_fiscal | string | Mes y año en el siguiente formato MM/AAAA. Ejm: 12/2015 __Requerido__
 
@@ -90,7 +90,7 @@ retention_recipient  = SELECT
 Campo | Tipo | Descripción
 --------- | ------- | -----------
 identificacion_sujeto | string | De 5 a 20 caracteres. __Requerido__
-tipo_identificacion | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 razon_social | string | Razón social. Máximo 300 caracteres. __Requerido__
 direccion_sujeto | string | Dirección
 email_sujeto | string | Correo electrónico. Máximo 300 caracteres.
@@ -137,8 +137,8 @@ support_documents = SELECT
 
 Campo | Tipo | Descripción
 --------- | ------- | -----------
-codigo_sustento | string | Ver (tabla)(#tipos-de-sustento-de-comprobantes) de tipos de sustento de los comprobantes. Máximo 2 caracteres. __Requerido__
-tipo_documento | string | Ver códigos de [tipos de documentos](#tipos-de-documentos). Máximo 2 caracteres. __Requerido__
+codigo_sustento | string | Ver (tabla)(https://datil.dev/#tipos-de-sustento-de-comprobantes) de tipos de sustento de los comprobantes. Máximo 2 caracteres. __Requerido__
+tipo_documento | string | Ver códigos de [tipos de documentos](https://datil.dev/#tipos-de-documentos). Máximo 2 caracteres. __Requerido__
 numero | string | Número completo del documento asociado a la retención ATS. Máximo 17 caracteres. __Requerido__
 fecha_emision | string |  Fecha de emisión en formato AAAA-MM-DDHoraZonaHoraria, definido en el estándar [ISO8601](http://tools.ietf.org/html/rfc3339#section-5.6). __Requerido__
 numero_autorización | string | Número de autorización del comprobante de venta. Máximo 300 caracteres. __Requerido__
@@ -167,8 +167,8 @@ Campo | Tipo | Descripción
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 tarifa | float | Porcentaje actual del impuesto expresado por un número entre 0.0 y 100.0 __Requerido__
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 
 ### Retenciones de Documentos de Soporte
 
@@ -192,8 +192,8 @@ Campo | Tipo | Descripción
 base_imponible | float | Suma de las bases imponibles de cada item para el tipo de impuesto y porcentaje. __Requerido__
 valor_retenido | float (hasta 2 cifras decimales) | Valor del impuesto.  __Requerido__
 tarifa | float (hasta 2 cifras decimales) | Porcentaje actual del impuesto.  __Requerido__
-codigo | string | Código del [tipo de impuesto para la retención en la factura](#tipos-de-impuesto-para-la-retencion-en-la-factura).  __Requerido__
-codigo_porcentaje | string | Código del [porcentaje del impuesto](#retencion-de-iva-presuntivo-y-renta). __Requerido__
+codigo | string | Código del [tipo de impuesto para la retención en la factura](https://datil.dev/#tipos-de-impuesto-para-la-retencion-en-la-factura).  __Requerido__
+codigo_porcentaje | string | Código del [porcentaje del impuesto](https://datil.dev/#retencion-de-iva-presuntivo-y-renta). __Requerido__
 
 ### Dividendos de Documentos de Soporte
 
@@ -269,11 +269,11 @@ codigo_punto_emision  | string |  Código numérico de 3 caracteres que represen
 secuencia  | integer (min. 1 - max. 999999999 ) | Número de secuencia del documento. __Requerido__
 fecha_emision  | string |  Fecha de emisión en formato AAAA-MM-DDHoraZonaHoraria, definido en el estándar [ISO8601](http://tools.ietf.org/html/rfc3339#section-5.6). __Requerido__
 identificacion_proveedor | string | Identificación del proveedor. De 5 a 20 caracteres. __Requerido__
-tipo_identificacion_proveedor | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion_proveedor | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 numero_autorizacion  | string | Número de autorización del documento. 10, 37 o 49 caracteres. __Requerido__
 pais_origen_proveedor | string | Código  de dos caracteres del país origen según [ISO_3166](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements). __Requerido__
-tipo  | string |  Código de [tipos de documentos](#tipos-de-documentos). __Requerido__
-tipo_proveedor  | string | Código de [tipo de proveedor](#tipo-de-proveedor) de reembolso. __Requerido__
+tipo  | string |  Código de [tipos de documentos](https://datil.dev/#tipos-de-documentos). __Requerido__
+tipo_proveedor  | string | Código de [tipo de proveedor](https://datil.dev/#tipo-de-proveedor) de reembolso. __Requerido__
 
 
 ### Impuestos de Reembolsos de los Documentos de Soporte
@@ -298,8 +298,8 @@ Campo | Tipo | Descripción
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 tarifa | float | Porcentaje actual del impuesto expresado por un número entre 0.0 y 100.0 __Requerido__
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 
 ### Pagos de Documentos de Soporte
 

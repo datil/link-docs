@@ -1,3 +1,7 @@
+---
+title: "Retención ATS"
+---
+
 A continuación están detalladas todas las estructuras disponibles para emitir un
 comprobante de retención ATS. Las únicas que deben contener información son:
 retenciones_ats.retencion_ats, retenciones_ats.documentos_soporte

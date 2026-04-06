@@ -1,3 +1,7 @@
+---
+title: "Nota de crédito"
+---
+
 A continuación están detalladas todas las estructuras disponibles para emitir una
 nota de crédito. Las únicas que deben contener información son:
 notas_de_credito.nota_de_credito, notas_de_credito.item, notas_de_credito.item_impuesto,

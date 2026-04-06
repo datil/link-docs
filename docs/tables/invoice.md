@@ -1,5 +1,5 @@
 ---
-title: Facturas
+title: Factura
 sidebar_position: 2
 ---
 A continuación están detalladas todas las estructuras disponibles para emitir una

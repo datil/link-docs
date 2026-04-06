@@ -3,6 +3,10 @@ title: Guía de remisión
 sidebar_position: 4
 ---
 
+Los queries para la emisión electrónica de __guías de remisión__ se guardan en el archivo de configuración `waybill.ini`.
+
+[Ejemplo de archivo waybill.ini](../../static/config/receipts/waybill.ini)
+
 ### Cabecera
 
 Obtiene información de la cabecera de la guía de remisión
@@ -30,7 +34,7 @@ secuencial | string  | Número de secuencia de la retención. __Requerido__
 fecha_inicio_transporte | datetime  | Fecha en la que inicia el transporte dada la guía de remisión __Requerido__
 fecha_fin_transporte | datetime  | Fecha en la que termina el transporte dada la guía de remisión __Requerido__
 direccion_partida | string | Dirección de partida
-clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](#clave-de-acceso) la clave de acceso?
+clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](https://datil.dev/#clave-de-acceso) la clave de acceso?
 tipo_emision | integer | Emisión normal: `1`. Emisión por indisponibilidad: `2` __Requerido__
 
 ### Vendedor
@@ -88,7 +92,7 @@ waybill_shipper  = SELECT
 Campo | Tipo | Descripción
 --------- | ------- | -----------
 identificacion | string | De 5 a 20 caracteres. __Requerido__
-tipo_identificacion | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 razon_social | string | Razón social. Máximo 300 caracteres. __Requerido__
 direccion | string | Dirección
 email | string | Correo electrónico. Máximo 300 caracteres.
@@ -127,7 +131,7 @@ Campo | Tipo | Descripción
 receiver_id | string | Identifica de manera única al destinatario en la guía de remisión. __Requerido__
 razon_social | string | Razón social del destinatario. Máximo 300 caracteres __Requerido__
 identificacion | string | De 5 a 20 caracteres. __Requerido__
-tipo_identificacion | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 email | string | Correo electrónico del destinatario. Máximo 300 caracteres.
 telefono | string | Teléfono del destinatario
 direccion | string | Dirección del destinatario
@@ -137,7 +141,7 @@ fecha_emision_documento_sustento | datetime  | Fecha de emisión del documento s
 numero_documento_sustento | string | Número completo del documento que detalla la mercadería a transportar. Normalmente facturas. Ejm: 001-002-010023098
 codigo_establecimiento_destino | string | Número establecimiento que recibe la entrega.  __Requerido__
 numero_documento_sustento | string | Número completo del documento que detalla la mercadería a transportar. Normalmente facturas. Ejm: 001-002-010023098 __Requerido__
-tipo_documento_sustento | string | tipo_documento_sustento | string | Códigos de [tipos de documentos](#tipos-de-documentos). __Requerido__
+tipo_documento_sustento | string | tipo_documento_sustento | string | Códigos de [tipos de documentos](https://datil.dev/#tipos-de-documentos). __Requerido__
 motivo_traslado | string | Motivo del traslado. Ejm: Entrega de mercadería. __Requerido__
 numero_autorizacion_documento_sustento | string | Autorización del documento de sustento.
 

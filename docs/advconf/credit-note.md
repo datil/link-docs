@@ -5,7 +5,7 @@ sidebar_position: 3
 
 Los queries para la emisión electrónica de __notas de crédito__ se guardan en el archivo de configuración `credit_note.ini`.
 
-[Ejemplo de archivo credit_note.ini](/link-app#credit_note-ini)
+[Ejemplo de archivo credit_note.ini](../../static/config/receipts/credit_note.ini)
 
 ### Cabecera
 
@@ -36,11 +36,11 @@ id_local | int o string | Identifica de manera única la nota de crédito. __Req
 secuencial | string  | Número de secuencia de la nota de crédito. __Requerido__
 fecha_emision | datetime  | Fecha de emisión   __Requerido__
 moneda | string | Código [ISO](https://en.wikipedia.org/wiki/ISO_4217) de la moneda. __Requerido__
-clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](#clave-de-acceso) la clave de acceso?
+clave_acceso | string | La clave de acceso representa un identificador único del comprobante. Si esta información no es provista, Dátil la generará. ¿Cómo [generar](https://datil.dev/#clave-de-acceso) la clave de acceso?
 tipo_emision | integer | Emisión normal: `1`. Emisión por indisponibilidad: `2` __Requerido__
 fecha_emision_documento_modificado | datetime | Fecha de emisión en formato AAAA-MM-DDHoraZonaHoraria del documento modificado, definido en el estándar [ISO8601](http://tools.ietf.org/html/rfc3339#section-5.6).  __Requerido__
 numero_documento_modificado | string | Número completo del documento que se está afectando. Normalmente facturas. Ejm: 001-002-010023098 __Requerido__
-tipo_documento_modificado | string | Códigos de [tipos de documentos](#tipos-de-documentos). __Requerido__
+tipo_documento_modificado | string | Códigos de [tipos de documentos](https://datil.dev/#tipos-de-documentos). __Requerido__
 motivo | string | Motivo de la operación. Ejm: Devolución de producto. __Requerido__
 
 
@@ -100,7 +100,7 @@ Campo | Tipo | Descripción
 --------- | ------- | -----------
 razon_social | string | Razón social. Máximo 300 caracteres. __Requerido__
 identificacion | string | De 5 a 20 caracteres. __Requerido__
-tipo_identificacion | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 email | string | Correo electrónico. Máximo 300 caracteres.
 telefono | string | Teléfono
 direccion | string | Dirección
@@ -143,8 +143,8 @@ credit_note_totals_taxes  = SELECT
 
 Campo | Tipo | Descripción
 --------- | ------- | -----------
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 
@@ -203,8 +203,8 @@ Campo | Tipo | Descripción
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 tarifa | float | Porcentaje actual del impuesto expresado por un número entre 0.0 y 100.0 __Requerido__
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 
 ### Detalles adicionales de items
 

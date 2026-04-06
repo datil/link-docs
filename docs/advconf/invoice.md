@@ -5,7 +5,7 @@ sidebar_position: 1
 
 Los queries para la emisión electrónica de __facturas__ se guardan en el archivo de configuración `invoice.ini`.
 
-[Ejemplo de archivo invoice.ini](/link-app#invoice-ini)
+[Ejemplo de archivo invoice.ini](../../static/config/receipts/invoice.ini)
 
 ### Cabecera
 
@@ -95,7 +95,7 @@ Campo | Tipo | Descripción
 --------- | ------- | -----------
 razon_social | string | Razón social. Máximo 300 caracteres. __Requerido__
 identificacion | string | De 5 a 20 caracteres. __Requerido__
-tipo_identificacion | string | Ver [tabla](#tipo-de-identificacion) de tipos de identificación __Requerido__
+tipo_identificacion | string | Ver [tabla](https://datil.dev/#tipo-de-identificacion) de tipos de identificación __Requerido__
 email | string | Correo electrónico. Máximo 300 caracteres. __Requerido__
 telefono | string | Teléfono
 direccion | string | Dirección
@@ -142,8 +142,8 @@ invoice_totals_taxes  = SELECT
 
 Campo | Tipo | Descripción
 --------- | ------- | -----------
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 
@@ -203,8 +203,8 @@ Campo | Tipo | Descripción
 base_imponible | float | Base imponible. __Requerido__
 valor | float | Valor del total. __Requerido__
 tarifa | float | Porcentaje actual del impuesto expresado por un número entre 0.0 y 100.0 __Requerido__
-codigo | string | Código del [tipo de impuesto](#tipos-de-impuesto) __Requerido__
-codigo_porcentaje | string | Código del [porcentaje](#codigo-de-porcentaje-de-iva). __Requerido__
+codigo | string | Código del [tipo de impuesto](https://datil.dev/#tipos-de-impuesto) __Requerido__
+codigo_porcentaje | string | Código del [porcentaje](https://datil.dev/#codigo-de-porcentaje-de-iva). __Requerido__
 
 ### Detalles adicionales de items
 
@@ -289,7 +289,7 @@ Parámetro           | Tipo                    | Descripción
 ------------------- | ----------------------- | ----------
 id_pago              | --                  | Identificador único del pago, se usa para obtener las [propiedades
 del pago](Propiedades de Pagos), si no hay un identificador único del pago o no hay propiedades de pagos, se debe devolver el *id_factura*.
-medio              | string                  | Código del [tipo de forma de pago](#tipos-de-forma-de-pago). __Requerido__
+medio              | string                  | Código del [tipo de forma de pago](https://datil.dev/#tipos-de-forma-de-pago). __Requerido__
 total               | float                   | Total aplicable a la forma de pago especificada. __Requerido__
 
 ### Propiedades de Pagos
