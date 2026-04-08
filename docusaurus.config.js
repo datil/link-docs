@@ -75,15 +75,15 @@ const config = {
     [
       'redocusaurus',
       {
-        openapi: {
+        /* openapi: {
           path: 'openapi',
           routeBasePath: 'api',
-        },
+        }, */
         specs: [
           {
             spec: 'openapi/link.openapi.yaml',
-            id: 'linkv2',
-            route: '/api/linkv2', // 👈 tú defines la ruta limpia
+            id: 'link',
+            route: '/api', // 👈 tú defines la ruta limpia
           },
           {
             spec: 'openapi/api.openapi.yaml',
@@ -91,13 +91,13 @@ const config = {
             route: '/api/datil-api', // 👈 tú defines la ruta limpia
           },
         ],
-        theme: {
+        /* theme: {
           primaryColor: '#1890ff',
-        },
+        }, */
       },
     ],
   ],
-   plugins: [
+   /* plugins: [
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -107,7 +107,7 @@ const config = {
         sidebarPath: './sidebarsApi.js',
       },
     ],
-  ],
+  ], */
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -129,14 +129,15 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-          {
+          /* {
           type: 'docSidebar',
           label: 'API',
           position: 'left',
           docsPluginId: 'api',
           sidebarId: 'apiSidebar',
-          },
+          }, */
           /* {to: '/blog', label: 'Blog', position: 'left'}, */
+          {to: '/api', label: 'API', position: 'left'},
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',

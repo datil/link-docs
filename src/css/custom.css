@@ -28,3 +28,14 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/*
+ * Redoc deja a menudo el <thead> con fondo claro mientras el texto hereda el color
+ * claro del modo oscuro de Docusaurus (ver redocusaurus docusaurus-theme-redoc styles).
+ */
+html[data-theme='dark'] .redocusaurus .redoc-wrap table thead th,
+html[data-theme='dark'] .redocusaurus .redoc-wrap table thead td {
+  background-color: var(--ifm-color-emphasis-200) !important;
+  color: var(--ifm-font-color-base) !important;
+  border-color: var(--ifm-table-border-color) !important;
+}
