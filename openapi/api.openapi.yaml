@@ -1,0 +1,862 @@
+openapi: 3.0.3
+info:
+  title: Dátil API (Next — Ecuador)
+  description: |
+    API documentada bajo `source/includes/next/es/ec/`. Servidor `api.datil.co`.
+    Los esquemas detallados de factura, impuestos, etc. siguen en Slate (`core/`, `common.md`).
+  version: 1.0.0
+servers:
+  - url: https://api.datil.co
+    description: API Next
+tags:
+  - name: Catálogo — productos
+  - name: Catálogo — categorías
+  - name: Ventas — facturas
+  - name: Ventas — notas de crédito
+  - name: Ventas — retenciones
+  - name: Compras — facturas
+  - name: Compras — notas de crédito
+  - name: Compras — retenciones
+  - name: Inventario
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+    CertificatePassword:
+      type: apiKey
+      in: header
+      name: X-Password
+  schemas:
+    JsonObject:
+      type: object
+      additionalProperties: true
+    ResultSet:
+      type: object
+      description: Listado paginado (count, results, next, previous)
+      additionalProperties: true
+paths:
+  /catalog/products:
+    get:
+      tags: [Catálogo — productos]
+      summary: Lista productos
+      operationId: getCatalogProducts
+      security:
+        - ApiKey: []
+      parameters:
+        - name: ids
+          in: query
+          schema:
+            type: string
+          description: IDs separados por coma
+        - name: category_id
+          in: query
+          schema:
+            type: string
+        - name: sku
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: track_inventory
+          in: query
+          schema:
+            type: boolean
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set de productos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+    post:
+      tags: [Catálogo — productos]
+      summary: Crea un producto
+      operationId: postCatalogProducts
+      security:
+        - ApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: Producto creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+        '201':
+          description: Creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/products/{id}:
+    get:
+      tags: [Catálogo — productos]
+      summary: Consulta un producto
+      operationId: getCatalogProductById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+    put:
+      tags: [Catálogo — productos]
+      summary: Actualiza un producto
+      operationId: putCatalogProductById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+    delete:
+      tags: [Catálogo — productos]
+      summary: Elimina un producto
+      operationId: deleteCatalogProductById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sin contenido
+        '200':
+          description: OK
+  /catalog/categories:
+    get:
+      tags: [Catálogo — categorías]
+      summary: Lista categorías
+      operationId: getCatalogCategories
+      security:
+        - ApiKey: []
+      parameters:
+        - name: ids
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+    post:
+      tags: [Catálogo — categorías]
+      summary: Crea una categoría
+      operationId: postCatalogCategories
+      security:
+        - ApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/categories/{id}:
+    get:
+      tags: [Catálogo — categorías]
+      summary: Consulta una categoría
+      operationId: getCatalogCategoryById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+    put:
+      tags: [Catálogo — categorías]
+      summary: Actualiza una categoría
+      operationId: putCatalogCategoryById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+    delete:
+      tags: [Catálogo — categorías]
+      summary: Elimina una categoría
+      operationId: deleteCatalogCategoryById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sin contenido
+  /sales/invoices/issues:
+    post:
+      tags: [Ventas — facturas]
+      summary: Emite una factura de venta
+      operationId: postSalesInvoicesIssues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /sales/invoices/{id}:
+    get:
+      tags: [Ventas — facturas]
+      summary: Consulta una factura de venta
+      operationId: getSalesInvoiceById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /sales/invoices:
+    get:
+      tags: [Ventas — facturas]
+      summary: Lista facturas de venta
+      operationId: getSalesInvoices
+      security:
+        - ApiKey: []
+      parameters:
+        - name: customer_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: issue_from
+          in: query
+          schema:
+            type: string
+        - name: issue_to
+          in: query
+          schema:
+            type: string
+        - name: sequence_from
+          in: query
+          schema:
+            type: string
+        - name: sequence_to
+          in: query
+          schema:
+            type: string
+        - name: supplier_locations_codes
+          in: query
+          schema:
+            type: string
+        - name: supplier_location_points_of_sale_codes
+          in: query
+          schema:
+            type: string
+        - name: select_keys
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+        - name: order_by
+          in: query
+          schema:
+            type: string
+        - name: environment
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /sales/invoices/{id}/reissues:
+    post:
+      tags: [Ventas — facturas]
+      summary: Re-emite una factura de venta
+      operationId: postSalesInvoiceReissues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /sales/invoices/{id}/payments:
+    post:
+      tags: [Ventas — facturas]
+      summary: Registra pagos sobre una factura
+      operationId: postSalesInvoicePayments
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /sales/credit-notes/issues:
+    post:
+      tags: [Ventas — notas de crédito]
+      summary: Emite nota de crédito de venta
+      operationId: postSalesCreditNotesIssues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /sales/credit-notes/{id}:
+    get:
+      tags: [Ventas — notas de crédito]
+      summary: Consulta nota de crédito de venta
+      operationId: getSalesCreditNoteById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /sales/credit-notes:
+    get:
+      tags: [Ventas — notas de crédito]
+      summary: Lista notas de crédito de venta
+      operationId: getSalesCreditNotes
+      security:
+        - ApiKey: []
+      parameters:
+        - name: customer_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: issue_from
+          in: query
+          schema:
+            type: string
+        - name: issue_to
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /sales/credit-notes/{id}/reissues:
+    post:
+      tags: [Ventas — notas de crédito]
+      summary: Re-emite nota de crédito de venta
+      operationId: postSalesCreditNoteReissues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /sales/withholding:
+    get:
+      tags: [Ventas — retenciones]
+      summary: Lista retenciones de venta recibidas
+      description: |
+        La documentación Slate usa `GET /sales/withholding` en los ejemplos cURL (singular).
+        El índice enlaza `GET /sales/withholdings`; verificar en backend cuál aplica.
+      operationId: getSalesWithholdingList
+      security:
+        - ApiKey: []
+      parameters:
+        - name: issuer_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: issue_from
+          in: query
+          schema:
+            type: string
+        - name: issue_to
+          in: query
+          schema:
+            type: string
+        - name: sequence_from
+          in: query
+          schema:
+            type: string
+        - name: sequence_to
+          in: query
+          schema:
+            type: string
+        - name: issuer_locations_codes
+          in: query
+          schema:
+            type: string
+        - name: issuer_location_points_of_sale_codes
+          in: query
+          schema:
+            type: string
+        - name: select_keys
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /purchases/invoices:
+    get:
+      tags: [Compras — facturas]
+      summary: Lista facturas de compra
+      operationId: getPurchasesInvoices
+      security:
+        - ApiKey: []
+      parameters:
+        - name: supplier_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /purchases/credit-notes:
+    get:
+      tags: [Compras — notas de crédito]
+      summary: Lista notas de crédito de compra
+      operationId: getPurchasesCreditNotes
+      security:
+        - ApiKey: []
+      parameters:
+        - name: supplier_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /purchases/withholdings/issues:
+    post:
+      tags: [Compras — retenciones]
+      summary: Emite retención de compra
+      operationId: postPurchasesWithholdingsIssues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /purchases/withholdings/{id}:
+    get:
+      tags: [Compras — retenciones]
+      summary: Consulta retención de compra
+      description: Usar `GET /purchases/withholdings/{id}`; un ejemplo cURL en Slate apunta a `/withholdings/{id}` (posible error de documentación).
+      operationId: getPurchasesWithholdingById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /purchases/withholdings:
+    get:
+      tags: [Compras — retenciones]
+      summary: Lista retenciones de compra
+      operationId: getPurchasesWithholdings
+      security:
+        - ApiKey: []
+      parameters:
+        - name: customer_tax_identification
+          in: query
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Result set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSet'
+  /purchases/withholdings/{id}/reissues:
+    post:
+      tags: [Compras — retenciones]
+      summary: Re-emite retención de compra
+      operationId: postPurchasesWithholdingReissues
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /inventory/warehouses:
+    get:
+      tags: [Inventario]
+      summary: Lista bodegas
+      operationId: getInventoryWarehouses
+      security:
+        - ApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JsonObject'
+  /inventory/warehouses/{id}:
+    get:
+      tags: [Inventario]
+      summary: Consulta una bodega
+      operationId: getInventoryWarehouseById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /inventory/warehouses/locations/{id}:
+    get:
+      tags: [Inventario]
+      summary: Consulta bodega por punto de emisión (location)
+      operationId: getInventoryWarehouseByLocationId
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /inventory/warehouses/{warehouse_id}/stocks:
+    get:
+      tags: [Inventario]
+      summary: Lista existencias en bodega
+      operationId: getInventoryWarehouseStocks
+      security:
+        - ApiKey: []
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /inventory/warehouses/{warehouse_id}/stocks/{item_id}:
+    get:
+      tags: [Inventario]
+      summary: Consulta existencias de un ítem en bodega
+      operationId: getInventoryWarehouseStockByItem
+      security:
+        - ApiKey: []
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: item_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /inventory/input:
+    post:
+      tags: [Inventario]
+      summary: Entrada de inventario
+      description: |
+        Los ejemplos cURL usan `/inventory/input` (singular). El título en Slate indica `POST /inventory/inputs`.
+      operationId: postInventoryInput
+      security:
+        - ApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /inventory/output:
+    post:
+      tags: [Inventario]
+      summary: Salida de inventario
+      description: |
+        Ruta canónica asumida `/inventory/output`. Un ejemplo cURL en la sección «Salida» del Slate reutiliza erróneamente `/inventory/input`.
+      operationId: postInventoryOutput
+      security:
+        - ApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'

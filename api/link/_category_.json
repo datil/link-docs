@@ -1,0 +1,9 @@
+{
+  "label": "API Link (link.datil.co)",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "API Link",
+    "description": "Facturación electrónica en Ecuador: emisión y consulta de comprobantes vía link.datil.co."
+  }
+}

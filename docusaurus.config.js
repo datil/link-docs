@@ -37,7 +37,7 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'es',
-    locales: ['en'],
+    locales: ['es', 'en'],
   },
 
   presets: [
@@ -72,18 +72,42 @@ const config = {
         },
       }),
     ],
+    [
+      'redocusaurus',
+      {
+        openapi: {
+          path: 'openapi',
+          routeBasePath: 'api',
+        },
+        specs: [
+          {
+            spec: 'openapi/link.openapi.yaml',
+            id: 'linkv2',
+            route: '/api/linkv2', // 👈 tú defines la ruta limpia
+          },
+          {
+            spec: 'openapi/api.openapi.yaml',
+            id: 'datil-api',
+            route: '/api/datil-api', // 👈 tú defines la ruta limpia
+          },
+        ],
+        theme: {
+          primaryColor: '#1890ff',
+        },
+      },
+    ],
   ],
-   /* plugins: [
+   plugins: [
     [
       '@docusaurus/plugin-content-docs',
       {
         id: 'api',
         path: 'api',
-        routeBasePath: 'api',
+        routeBasePath: 'manual-api',
         sidebarPath: './sidebarsApi.js',
       },
     ],
-  ], */
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -105,13 +129,13 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-          /* {
+          {
           type: 'docSidebar',
           label: 'API',
           position: 'left',
           docsPluginId: 'api',
           sidebarId: 'apiSidebar',
-          }, */
+          },
           /* {to: '/blog', label: 'Blog', position: 'left'}, */
           {
             href: 'https://github.com/facebook/docusaurus',

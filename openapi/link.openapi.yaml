@@ -1,0 +1,913 @@
+openapi: 3.0.3
+info:
+  title: Dátil API (Link)
+  description: |
+    API REST para facturación electrónica en Ecuador (emisión y consulta de comprobantes).
+    Documentación derivada de los includes Slate en `source/includes/` (excl. link-app).
+  version: 1.0.0
+servers:
+  - url: https://link.datil.co
+    description: API principal
+tags:
+  - name: Facturas
+  - name: Notas de crédito
+  - name: Notas de débito
+  - name: Retenciones
+  - name: Guías de remisión
+  - name: Liquidaciones de compra
+  - name: Edocs
+  - name: Webhooks
+  - name: Catálogo
+  - name: Descargas
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Key
+    CertificatePassword:
+      type: apiKey
+      in: header
+      name: X-Password
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-key
+      in: header
+      required: false
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 48
+      description: Clave de idempotencia (UUID v4 o nano-id). Emisión y re-emisión de facturas.
+  schemas:
+    JsonObject:
+      type: object
+      additionalProperties: true
+      description: Cuerpo o respuesta JSON según la documentación de cada recurso (ver Slate).
+    XmlBody:
+      type: string
+      description: Cuerpo XML del comprobante según documentación.
+    WebhookSubscriptionRequest:
+      type: object
+      required:
+        - event_name
+        - webhook_url
+      properties:
+        event_name:
+          type: string
+          enum: [receipt-issued, issue-error]
+        webhook_url:
+          type: string
+          format: uri
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: string
+        parameter:
+          type: string
+        value: {}
+security:
+  - ApiKey: []
+paths:
+  /invoices/issue:
+    post:
+      tags: [Facturas]
+      summary: Emite una factura (JSON)
+      operationId: postInvoicesIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: Respuesta de emisión (estado inicial del comprobante).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+  /invoices/issue/xml:
+    post:
+      tags: [Facturas]
+      summary: Emite una factura (XML)
+      operationId: postInvoicesIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+        '400':
+          description: Solicitud incorrecta
+  /invoices/{id}:
+    get:
+      tags: [Facturas]
+      summary: Consulta una factura
+      operationId: getInvoiceById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: Factura encontrada
+        '404':
+          description: No encontrado
+  /invoices/{id}/reissue:
+    post:
+      tags: [Facturas]
+      summary: Re-emite una factura
+      operationId: postInvoiceReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /invoices:
+    post:
+      tags: [Facturas]
+      summary: Crea una factura (sin emitir según flujo documentado)
+      operationId: postInvoicesCreate
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: Objeto factura con `id` y `clave_acceso` cuando aplica
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /credit-notes/issue:
+    post:
+      tags: [Notas de crédito]
+      summary: Emite nota de crédito (JSON)
+      operationId: postCreditNotesIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /credit-notes/issue/xml:
+    post:
+      tags: [Notas de crédito]
+      summary: Emite nota de crédito (XML)
+      operationId: postCreditNotesIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /credit-notes/{id}:
+    get:
+      tags: [Notas de crédito]
+      summary: Consulta nota de crédito
+      operationId: getCreditNoteById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /credit-notes/{id}/reissue:
+    post:
+      tags: [Notas de crédito]
+      summary: Re-emite nota de crédito
+      operationId: postCreditNoteReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /debit-notes/issue:
+    post:
+      tags: [Notas de débito]
+      summary: Emite nota de débito (JSON)
+      operationId: postDebitNotesIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /debit-notes/issue/xml:
+    post:
+      tags: [Notas de débito]
+      summary: Emite nota de débito (XML)
+      operationId: postDebitNotesIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /debit-notes/{id}:
+    get:
+      tags: [Notas de débito]
+      summary: Consulta nota de débito
+      operationId: getDebitNoteById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /debit-notes/{id}/reissue:
+    post:
+      tags: [Notas de débito]
+      summary: Re-emite nota de débito
+      operationId: postDebitNoteReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /ats-retentions/issue:
+    post:
+      tags: [Retenciones]
+      summary: Emite retención ATS (JSON)
+      operationId: postAtsRetentionsIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /ats-retentions/issue/xml:
+    post:
+      tags: [Retenciones]
+      summary: Emite retención ATS (XML)
+      operationId: postAtsRetentionsIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /retentions/issue:
+    post:
+      tags: [Retenciones]
+      summary: Emite retención en la fuente (JSON)
+      operationId: postRetentionsIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /retentions/issue/xml:
+    post:
+      tags: [Retenciones]
+      summary: Emite retención en la fuente (XML)
+      operationId: postRetentionsIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /ats-retentions/{id}:
+    get:
+      tags: [Retenciones]
+      summary: Consulta retención ATS
+      operationId: getAtsRetentionById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /retentions/{id}:
+    get:
+      tags: [Retenciones]
+      summary: Consulta retención en la fuente
+      operationId: getRetentionById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /retentions/{id}/reissue:
+    post:
+      tags: [Retenciones]
+      summary: Re-emite retención en la fuente
+      operationId: postRetentionReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /waybills/issue:
+    post:
+      tags: [Guías de remisión]
+      summary: Emite guía de remisión (JSON)
+      operationId: postWaybillsIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /waybills/issue/xml:
+    post:
+      tags: [Guías de remisión]
+      summary: Emite guía de remisión (XML)
+      operationId: postWaybillsIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /waybills/{id}:
+    get:
+      tags: [Guías de remisión]
+      summary: Consulta guía de remisión
+      operationId: getWaybillById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /waybills/{id}/reissue:
+    post:
+      tags: [Guías de remisión]
+      summary: Re-emite guía de remisión
+      operationId: postWaybillReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /purchase-settlements/issue:
+    post:
+      tags: [Liquidaciones de compra]
+      summary: Emite liquidación de compra (JSON)
+      operationId: postPurchaseSettlementsIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /purchase-settlements/issue/xml:
+    post:
+      tags: [Liquidaciones de compra]
+      summary: Emite liquidación de compra (XML)
+      operationId: postPurchaseSettlementsIssueXml
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/XmlBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /purchase-settlements/{id}:
+    get:
+      tags: [Liquidaciones de compra]
+      summary: Consulta liquidación de compra
+      operationId: getPurchaseSettlementById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+          description: OK
+  /purchase-settlements/{id}/reissue:
+    post:
+      tags: [Liquidaciones de compra]
+      summary: Re-emite liquidación de compra
+      operationId: postPurchaseSettlementReissue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /edocs/{id}/issue:
+    post:
+      tags: [Edocs]
+      summary: Autorizar comprobante
+      operationId: postEdocsIssue
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del documento
+      responses:
+        '200':
+          description: Estado de autorización
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /edocs/{id}:
+    get:
+      tags: [Edocs]
+      summary: Consulta de autorización
+      operationId: getEdocById
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /edocs/send-email/{id}:
+    post:
+      tags: [Edocs]
+      summary: Envío de comprobante por correo
+      operationId: postEdocsSendEmail
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /webhooks:
+    post:
+      tags: [Webhooks]
+      summary: Suscribirse a notificaciones
+      operationId: postWebhooks
+      security:
+        - ApiKey: []
+          CertificatePassword: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookSubscriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/id-types:
+    get:
+      tags: [Catálogo]
+      summary: Tipos de identificación
+      operationId: getCatalogIdTypes
+      security:
+        - ApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/withholdings-tax-rates/{tipo_impuesto}:
+    get:
+      tags: [Catálogo]
+      summary: Tasas de retención por tipo de impuesto
+      operationId: getCatalogWithholdingsTaxRates
+      security:
+        - ApiKey: []
+      parameters:
+        - name: tipo_impuesto
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/document-types:
+    get:
+      tags: [Catálogo]
+      summary: Tipos de documento
+      operationId: getCatalogDocumentTypes
+      security:
+        - ApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /catalog/sales-tax-rates/{tipo_impuesto}:
+    get:
+      tags: [Catálogo]
+      summary: Tasas de IVA u otros por tipo de impuesto
+      operationId: getCatalogSalesTaxRates
+      security:
+        - ApiKey: []
+      parameters:
+        - name: tipo_impuesto
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonObject'
+  /ver/{id}/pdf:
+    servers:
+      - url: https://app.datil.co
+        description: Descarga RIDE (PDF)
+    get:
+      tags: [Descargas]
+      summary: Consulta RIDE (PDF)
+      operationId: getVerPdf
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del comprobante
+      responses:
+        '200':
+          description: PDF o redirección según implementación
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /ver/{id}/xml:
+    servers:
+      - url: https://app.datil.co
+        description: Descarga XML
+    get:
+      tags: [Descargas]
+      summary: Consulta XML del comprobante
+      operationId: getVerXml
+      security:
+        - ApiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: XML
+          content:
+            application/xml:
+              schema:
+                type: string
